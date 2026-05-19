@@ -140,7 +140,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   _InfoTile(
                     icon: Icons.person_rounded,
                     label: 'Name',
-                    value: 'Saidul Karim',
+                    value: 'A.T.M. Saidul Karim',
                   ),
 
                   _InfoTile(
@@ -242,7 +242,7 @@ class _DeveloperHeader extends StatelessWidget {
               ),
               SizedBox(height: 4),
               Text(
-                'Design, development and architecture',
+                'Design, Development and Architecture',
                 style: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 13,
