@@ -1,8 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/services/csv_backup_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/local/app_database.dart';
 
 class BackupScreen extends StatefulWidget {
   const BackupScreen({super.key});
@@ -94,12 +99,84 @@ class _BackupScreenState extends State<BackupScreen> {
     _showMessage(result.message);
   }
 
+  Future<void> _deleteBackupFile(String filePath) async {
+    final cleanPath = filePath.trim();
+
+    if (cleanPath.isEmpty || cleanPath == '-') {
+      _showMessage('Backup file path not found.');
+      return;
+    }
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          title: const Text('Delete Backup File'),
+          content: const Text(
+            'This will delete the CSV backup file and remove it from backup history.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text('Delete', style: TextStyle(color: AppColors.danger)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm != true) return;
+
+    setState(() => _busy = true);
+
+    try {
+      final file = File(cleanPath);
+      final exists = await file.exists();
+
+      if (exists) {
+        await file.delete();
+      }
+
+      final db = await AppDatabase.instance.database;
+      await db.delete(
+        'backup_logs',
+        where: 'file_path = ?',
+        whereArgs: [cleanPath],
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _logs.removeWhere(
+          (e) => e['file_path']?.toString().trim() == cleanPath,
+        );
+        _busy = false;
+      });
+
+      _showMessage(
+        exists
+            ? 'Backup CSV deleted successfully.'
+            : 'Backup file was not found. History entry removed.',
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() => _busy = false);
+
+      _showMessage(
+        'Could not delete this file. It may be outside app storage or already moved.',
+      );
+    }
+  }
+
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        behavior: SnackBarBehavior.floating,
-      ),
+      SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
     );
   }
 
@@ -112,10 +189,7 @@ class _BackupScreenState extends State<BackupScreen> {
           title: const Text('Backup Saved'),
           content: SelectableText(
             path,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 13,
-            ),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
           ),
           actions: [
             TextButton(
@@ -143,7 +217,7 @@ class _BackupScreenState extends State<BackupScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Backup',
           style: TextStyle(
             color: AppColors.textPrimary,
@@ -189,7 +263,7 @@ class _BackupScreenState extends State<BackupScreen> {
 
               const SizedBox(height: 28),
 
-              const Text(
+              Text(
                 'Backup History',
                 style: TextStyle(
                   color: AppColors.textPrimary,
@@ -206,7 +280,7 @@ class _BackupScreenState extends State<BackupScreen> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               else if (_logs.isEmpty)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 40),
                   child: Center(
                     child: Text(
@@ -226,64 +300,96 @@ class _BackupScreenState extends State<BackupScreen> {
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: AppColors.card,
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 22,
-                            backgroundColor: AppColors.accent.withOpacity(0.18),
-                            child: Icon(
-                              type.contains('import')
-                                  ? Icons.restore_rounded
-                                  : Icons.file_upload_rounded,
-                              color: AppColors.accentLight,
+                    child: GestureDetector(
+                      onLongPress: () async {
+                        if (path != '-') {
+                          await Share.shareXFiles([
+                            XFile(path),
+                          ], text: 'bHiVE Wallet CSV Backup');
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppColors.card,
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 22,
+                              backgroundColor: AppColors.accent.withOpacity(
+                                0.18,
+                              ),
+                              child: Icon(
+                                type.contains('import')
+                                    ? Icons.restore_rounded
+                                    : Icons.file_upload_rounded,
+                                color: AppColors.accentLight,
+                              ),
                             ),
-                          ),
 
-                          const SizedBox(width: 14),
+                            const SizedBox(width: 14),
 
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  type == 'csv_import'
-                                      ? 'CSV Restore'
-                                      : 'CSV Export',
-                                  style: const TextStyle(
-                                    color: AppColors.textPrimary,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    type == 'csv_import'
+                                        ? 'CSV Restore'
+                                        : 'CSV Export',
+                                    style: TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  _formatDate(createdAt),
-                                  style: const TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 13,
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _formatDate(createdAt),
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 13,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  path,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: AppColors.textMuted,
-                                    fontSize: 12,
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    path,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: AppColors.textMuted,
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Long press to share',
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+
+                            const SizedBox(width: 10),
+
+                            IconButton(
+                              tooltip: 'Delete CSV',
+                              onPressed: () {
+                                _deleteBackupFile(path.trim());
+                              },
+                              icon: Icon(
+                                Icons.delete_outline_rounded,
+                                color: AppColors.danger,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -307,14 +413,10 @@ class _BackupInfoCard extends StatelessWidget {
         color: AppColors.card,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.security_rounded,
-            color: AppColors.textPrimary,
-            size: 28,
-          ),
+          Icon(Icons.security_rounded, color: AppColors.textPrimary, size: 28),
           SizedBox(width: 14),
           Expanded(
             child: Text(
@@ -359,16 +461,12 @@ class _ActionButton extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
           child: Column(
             children: [
-              Icon(
-                icon,
-                color: AppColors.textPrimary,
-                size: 30,
-              ),
+              Icon(icon, color: AppColors.textPrimary, size: 30),
               const SizedBox(height: 12),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 15.5,
                   fontWeight: FontWeight.w800,
@@ -378,7 +476,7 @@ class _ActionButton extends StatelessWidget {
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12.5,
                 ),

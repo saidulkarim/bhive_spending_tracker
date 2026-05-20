@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -19,7 +21,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   List<CategoryModel> _categories = [];
   bool _loading = true;
 
-  static const List<IconData> _availableIcons = [
+  static final List<IconData> _availableIcons = [
     Icons.restaurant_rounded,
     Icons.directions_bus_rounded,
     Icons.shopping_bag_rounded,
@@ -41,7 +43,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     Icons.category_rounded,
   ];
 
-  static const List<Color> _availableColors = [
+  static final List<Color> _availableColors = [
     Color(0xFF2FA866),
     Color(0xFFE05B5B),
     Color(0xFFE6A23C),
@@ -84,7 +86,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
       ),
       builder: (sheetContext) {
@@ -111,18 +113,18 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       builder: (dialogContext) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          title: const Text('Remove category?'),
+          title: Text('Remove category?'),
           content: Text(
             '“${category.name}” will be hidden from future transactions.',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('No'),
+              child: Text('No'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Yes, Remove'),
+              child: Text('Yes, Remove'),
             ),
           ],
         );
@@ -138,7 +140,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     await _load();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text('Category removed.'),
         behavior: SnackBarBehavior.floating,
       ),
@@ -152,7 +154,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Categories',
           style: TextStyle(
             color: AppColors.textPrimary,
@@ -163,11 +165,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: EdgeInsets.only(right: 12),
             child: ElevatedButton.icon(
               onPressed: () => _openCategorySheet(),
-              icon: const Icon(Icons.add_rounded, size: 18),
-              label: const Text(
+              icon: Icon(Icons.add_rounded, size: 18),
+              label: Text(
                 'Add',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
@@ -175,11 +177,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 backgroundColor: AppColors.accent,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 13,
-                  vertical: 9,
-                ),
-                minimumSize: const Size(0, 38),
+                padding: EdgeInsets.symmetric(horizontal: 13, vertical: 9),
+                minimumSize: Size(0, 38),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -193,13 +192,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         top: false,
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Container(
                 height: 48,
-                padding: const EdgeInsets.all(4),
+                padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: AppColors.card,
                   borderRadius: BorderRadius.circular(16),
@@ -221,13 +220,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Expanded(
               child: _loading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? Center(child: CircularProgressIndicator())
                   : _categories.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'No categories found.',
                         style: TextStyle(
@@ -239,9 +238,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   : RefreshIndicator(
                       onRefresh: _load,
                       child: ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 110),
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 110),
                         itemCount: _categories.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        separatorBuilder: (_, _) => SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final category = _categories[index];
 
@@ -322,7 +321,7 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
 
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Category name is required.'),
           behavior: SnackBarBehavior.floating,
         ),
@@ -379,29 +378,29 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             Text(
               _isEdit ? 'Edit Category' : 'Add Category',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
               ),
             ),
 
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
 
             TextField(
               controller: _nameController,
               textInputAction: TextInputAction.done,
-              style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(labelText: 'Category Name'),
+              style: TextStyle(color: AppColors.textPrimary),
+              decoration: InputDecoration(labelText: 'Category Name'),
             ),
 
-            const SizedBox(height: 22),
+            SizedBox(height: 22),
 
-            const Text(
+            Text(
               'Icon',
               style: TextStyle(
                 color: AppColors.textSecondary,
@@ -410,7 +409,7 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Wrap(
               spacing: 10,
@@ -441,9 +440,9 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
               }).toList(),
             ),
 
-            const SizedBox(height: 22),
+            SizedBox(height: 22),
 
-            const Text(
+            Text(
               'Color',
               style: TextStyle(
                 color: AppColors.textSecondary,
@@ -452,7 +451,7 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Wrap(
               spacing: 12,
@@ -464,7 +463,7 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
                   onTap: () {
                     setState(() => _selectedColor = color);
                   },
-                  customBorder: const CircleBorder(),
+                  customBorder: CircleBorder(),
                   child: Container(
                     width: 42,
                     height: 42,
@@ -483,7 +482,7 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
               }).toList(),
             ),
 
-            const SizedBox(height: 26),
+            SizedBox(height: 26),
 
             SizedBox(
               width: double.infinity,
@@ -498,7 +497,7 @@ class _CategoryFormSheetState extends State<_CategoryFormSheet> {
                 ),
                 onPressed: _saving ? null : _save,
                 icon: _saving
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 18,
                         height: 18,
                         child: CircularProgressIndicator(strokeWidth: 2),
@@ -572,7 +571,7 @@ class _CategoryTile extends StatelessWidget {
     final color = Color(category.colorValue);
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+      padding: EdgeInsets.fromLTRB(14, 12, 6, 12),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(18),
@@ -585,14 +584,14 @@ class _CategoryTile extends StatelessWidget {
             child: Icon(icon, color: color, size: 23),
           ),
 
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
 
           Expanded(
             child: Text(
               category.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -603,7 +602,7 @@ class _CategoryTile extends StatelessWidget {
           IconButton(
             visualDensity: VisualDensity.compact,
             onPressed: onEdit,
-            icon: const Icon(
+            icon: Icon(
               Icons.edit_rounded,
               color: AppColors.textMuted,
               size: 21,
@@ -613,7 +612,7 @@ class _CategoryTile extends StatelessWidget {
           IconButton(
             visualDensity: VisualDensity.compact,
             onPressed: onDelete,
-            icon: const Icon(
+            icon: Icon(
               Icons.delete_outline_rounded,
               color: AppColors.textMuted,
               size: 21,

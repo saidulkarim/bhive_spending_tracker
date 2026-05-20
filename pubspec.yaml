@@ -1,7 +1,7 @@
 name: bhive_spending_tracker
 description: Offline-first daily spending tracker app.
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ^3.11.0
@@ -27,6 +27,7 @@ dependencies:
   uuid: ^4.5.1
   collection: ^1.18.0
   package_info_plus: ^9.0.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +40,18 @@ flutter:
 
   assets:
     - assets/icons/bhive_spending_tracker.png
+  fonts:
+    - family: Exo2
+      fonts:
+        - asset: assets/fonts/Exo2-Regular.ttf
+        - asset: assets/fonts/Exo2-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Exo2-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Exo2-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Exo2-Black.ttf
+          weight: 900
 
 flutter_launcher_icons:
   android: true
@@ -49,3 +62,4 @@ flutter_launcher_icons:
   adaptive_icon_foreground: "assets/icons/bhive_spending_tracker.png"
 
   min_sdk_android: 21
+

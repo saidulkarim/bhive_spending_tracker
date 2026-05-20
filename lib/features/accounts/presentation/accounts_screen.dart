@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -17,7 +19,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
   List<AccountModel> _accounts = [];
   bool _loading = true;
 
-  final List<Color> _colors = const [
+  final List<Color> _colors = [
     Color(0xFF2FA866),
     Color(0xFFE05B5B),
     Color(0xFF5B8DEF),
@@ -53,7 +55,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
       ),
       builder: (context) {
@@ -78,16 +80,16 @@ class _AccountsScreenState extends State<AccountsScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          title: const Text('Remove account?'),
+          title: Text('Remove account?'),
           content: Text('“${model.name}” will be hidden from account list.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('No'),
+              child: Text('No'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Yes, Remove'),
+              child: Text('Yes, Remove'),
             ),
           ],
         );
@@ -103,7 +105,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
     await _load();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text('Account removed.'),
         behavior: SnackBarBehavior.floating,
       ),
@@ -124,7 +126,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Accounts',
           style: TextStyle(
             color: AppColors.textPrimary,
@@ -134,20 +136,17 @@ class _AccountsScreenState extends State<AccountsScreen> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: EdgeInsets.only(right: 12),
             child: ElevatedButton.icon(
               onPressed: () => _openSheet(),
-              icon: const Icon(Icons.add_rounded, size: 18),
-              label: const Text(
-                'Add',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
+              icon: Icon(Icons.add_rounded, size: 18),
+              label: Text('Add', style: TextStyle(fontWeight: FontWeight.w700)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.accent,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                minimumSize: const Size(0, 38),
-                padding: const EdgeInsets.symmetric(horizontal: 13),
+                minimumSize: Size(0, 38),
+                padding: EdgeInsets.symmetric(horizontal: 13),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -159,31 +158,31 @@ class _AccountsScreenState extends State<AccountsScreen> {
       body: SafeArea(
         top: false,
         child: _loading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator())
             : RefreshIndicator(
                 onRefresh: _load,
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 110),
+                  padding: EdgeInsets.fromLTRB(20, 16, 20, 110),
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(18),
+                      padding: EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         color: AppColors.card,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.account_balance_wallet_rounded,
                             color: AppColors.textPrimary,
                             size: 28,
                           ),
-                          const SizedBox(width: 14),
+                          SizedBox(width: 14),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Total Balance',
                                   style: TextStyle(
                                     color: AppColors.textSecondary,
@@ -191,10 +190,10 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4),
                                 Text(
                                   _money(totalBalance),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppColors.textPrimary,
                                     fontSize: 24,
                                     fontWeight: FontWeight.w800,
@@ -207,10 +206,10 @@ class _AccountsScreenState extends State<AccountsScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18),
 
                     if (_accounts.isEmpty)
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(top: 80),
                         child: Center(
                           child: Text(
@@ -224,9 +223,9 @@ class _AccountsScreenState extends State<AccountsScreen> {
                         final color = Color(item.colorValue);
 
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
+                          padding: EdgeInsets.only(bottom: 12),
                           child: Container(
-                            padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+                            padding: EdgeInsets.fromLTRB(14, 12, 6, 12),
                             decoration: BoxDecoration(
                               color: AppColors.card,
                               borderRadius: BorderRadius.circular(18),
@@ -242,7 +241,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                   ),
                                 ),
 
-                                const SizedBox(width: 14),
+                                SizedBox(width: 14),
 
                                 Expanded(
                                   child: Column(
@@ -251,24 +250,24 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                     children: [
                                       Text(
                                         item.name,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColors.textPrimary,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
+                                      SizedBox(height: 4),
                                       Text(
                                         'Opening: ${_money(item.openingBalance)}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColors.textMuted,
                                           fontSize: 12.5,
                                         ),
                                       ),
-                                      const SizedBox(height: 3),
+                                      SizedBox(height: 3),
                                       Text(
                                         'Current: ${_money(item.currentBalance)}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColors.textSecondary,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w700,
@@ -280,7 +279,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
 
                                 IconButton(
                                   onPressed: () => _openSheet(model: item),
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.edit_rounded,
                                     color: AppColors.textMuted,
                                   ),
@@ -288,7 +287,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
 
                                 IconButton(
                                   onPressed: () => _delete(item),
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.delete_outline_rounded,
                                     color: AppColors.textMuted,
                                   ),
@@ -369,7 +368,7 @@ class _AccountFormSheetState extends State<_AccountFormSheet> {
 
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Account name is required.'),
           behavior: SnackBarBehavior.floating,
         ),
@@ -426,57 +425,53 @@ class _AccountFormSheetState extends State<_AccountFormSheet> {
               ),
             ),
 
-            const SizedBox(height: 22),
+            SizedBox(height: 22),
 
             Text(
               _isEdit ? 'Edit Account' : 'Add Account',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
               ),
             ),
 
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
 
             TextField(
               controller: _nameController,
-              style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(labelText: 'Account Name'),
+              style: TextStyle(color: AppColors.textPrimary),
+              decoration: InputDecoration(labelText: 'Account Name'),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             TextField(
               controller: _openingBalanceController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              style: TextStyle(color: AppColors.textPrimary),
+              decoration: InputDecoration(
                 labelText: 'Opening Balance',
                 prefixText: '৳ ',
               ),
             ),
 
             if (_isEdit) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextField(
                 controller: _currentBalanceController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: const InputDecoration(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                style: TextStyle(color: AppColors.textPrimary),
+                decoration: InputDecoration(
                   labelText: 'Current Balance',
                   prefixText: '৳ ',
                 ),
               ),
             ],
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
-            const Text(
+            Text(
               'Color',
               style: TextStyle(
                 color: AppColors.textSecondary,
@@ -485,7 +480,7 @@ class _AccountFormSheetState extends State<_AccountFormSheet> {
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Wrap(
               spacing: 12,
@@ -497,7 +492,7 @@ class _AccountFormSheetState extends State<_AccountFormSheet> {
                   onTap: () {
                     setState(() => _selectedColor = color);
                   },
-                  customBorder: const CircleBorder(),
+                  customBorder: CircleBorder(),
                   child: Container(
                     width: 42,
                     height: 42,
@@ -514,7 +509,7 @@ class _AccountFormSheetState extends State<_AccountFormSheet> {
               }).toList(),
             ),
 
-            const SizedBox(height: 28),
+            SizedBox(height: 28),
 
             SizedBox(
               width: double.infinity,
@@ -529,7 +524,7 @@ class _AccountFormSheetState extends State<_AccountFormSheet> {
                 ),
                 onPressed: _saving ? null : _save,
                 icon: _saving
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 18,
                         height: 18,
                         child: CircularProgressIndicator(strokeWidth: 2),

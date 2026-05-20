@@ -7,8 +7,8 @@ class AppDatabase {
 
   static final AppDatabase instance = AppDatabase._();
 
-  static const String _databaseName = 'spending_tracker.db';
-  static const int _databaseVersion = 2;
+  static final String _databaseName = 'spending_tracker.db';
+  static final int _databaseVersion = 2;
 
   Database? _database;
 

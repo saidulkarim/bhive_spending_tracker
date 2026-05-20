@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../data/local/app_database.dart';
 
 class ReportSummary {
-  const ReportSummary({
+  ReportSummary({
     required this.income,
     required this.expense,
     required this.balance,
@@ -19,7 +19,7 @@ class ReportSummary {
 }
 
 class CategoryReportItem {
-  const CategoryReportItem({
+  CategoryReportItem({
     required this.categoryName,
     required this.total,
     required this.percent,
@@ -31,7 +31,7 @@ class CategoryReportItem {
 }
 
 class MonthlyTrendItem {
-  const MonthlyTrendItem({
+  MonthlyTrendItem({
     required this.month,
     required this.income,
     required this.expense,
@@ -43,7 +43,7 @@ class MonthlyTrendItem {
 }
 
 class AccountBalanceItem {
-  const AccountBalanceItem({
+  AccountBalanceItem({
     required this.name,
     required this.balance,
   });

@@ -1,4 +1,7 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -12,8 +15,8 @@ class PasscodeScreen extends StatefulWidget {
 }
 
 class _PasscodeScreenState extends State<PasscodeScreen> {
-  static const String pinKey = 'app_pin';
-  static const String lockEnabledKey = 'app_lock_enabled';
+  static String pinKey = 'app_pin';
+  static String lockEnabledKey = 'app_lock_enabled';
 
   String _enteredPin = '';
   String? _savedPin;
@@ -52,7 +55,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
     setState(() => _enteredPin += digit);
 
     if (_enteredPin.length == 4) {
-      await Future.delayed(const Duration(milliseconds: 150));
+      await Future.delayed(Duration(milliseconds: 150));
 
       if (_isSetupMode) {
         await _handleSetupPin();
@@ -102,7 +105,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
   void _goHome() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const MainShell()),
+      MaterialPageRoute(builder: (_) => MainShell()),
     );
   }
 
@@ -122,7 +125,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: AppColors.background,
         body: Center(child: CircularProgressIndicator()),
       );
@@ -136,27 +139,24 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(28, 48, 28, 28),
+          padding: EdgeInsets.fromLTRB(28, 48, 28, 28),
           child: Column(
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 14),
-              const Text(
+              SizedBox(height: 14),
+              Text(
                 'Use a 4-digit code to protect your spending data.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 15,
-                ),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 15),
               ),
-              const SizedBox(height: 44),
+              SizedBox(height: 44),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(4, (index) {
@@ -164,7 +164,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   return Container(
                     width: 18,
                     height: 18,
-                    margin: const EdgeInsets.symmetric(horizontal: 9),
+                    margin: EdgeInsets.symmetric(horizontal: 9),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: filled ? AppColors.accent : Colors.transparent,
@@ -173,7 +173,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   );
                 }),
               ),
-              const Spacer(),
+              Spacer(),
               _NumberPad(onDigit: _onDigit, onBackspace: _backspace),
             ],
           ),
@@ -196,8 +196,8 @@ class _NumberPad extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       itemCount: keys.length,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         mainAxisExtent: 74,
         crossAxisSpacing: 16,
@@ -206,11 +206,11 @@ class _NumberPad extends StatelessWidget {
       itemBuilder: (context, index) {
         final key = keys[index];
 
-        if (key.isEmpty) return const SizedBox.shrink();
+        if (key.isEmpty) return SizedBox.shrink();
 
         if (key == 'back') {
           return _KeyButton(
-            child: const Icon(Icons.backspace_outlined),
+            child: Icon(Icons.backspace_outlined),
             onTap: onBackspace,
           );
         }
@@ -218,7 +218,7 @@ class _NumberPad extends StatelessWidget {
         return _KeyButton(
           child: Text(
             key,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
           ),
           onTap: () => onDigit(key),
         );
@@ -243,9 +243,9 @@ class _KeyButton extends StatelessWidget {
         onTap: onTap,
         child: Center(
           child: IconTheme(
-            data: const IconThemeData(color: AppColors.textPrimary),
+            data: IconThemeData(color: AppColors.textPrimary),
             child: DefaultTextStyle(
-              style: const TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: AppColors.textPrimary),
               child: child,
             ),
           ),

@@ -1,5 +1,8 @@
+// ignore_for_file: unused_element_parameter, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 
@@ -12,6 +15,9 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   String _versionText = 'Loading...';
+
+  static const String _websiteUrl = 'https://imrony.saidul-cse-ju.workers.dev/';
+  static const String _linkedInUrl = 'https://www.linkedin.com/in/atmskrony';
 
   @override
   void initState() {
@@ -27,6 +33,55 @@ class _AboutScreenState extends State<AboutScreen> {
     setState(() {
       _versionText = 'Version ${info.version}+${info.buildNumber}';
     });
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to open link.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _openEmail() async {
+    final uri = Uri(
+      scheme: 'mailto',
+      path: 'saidul.cse.ju@gmail.com',
+      queryParameters: {'subject': 'bHiVE Wallet'},
+    );
+
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to open email app.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _openPhone() async {
+    final uri = Uri(scheme: 'tel', path: '+8801312663311');
+
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to open phone app.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
@@ -70,7 +125,7 @@ class _AboutScreenState extends State<AboutScreen> {
 
                   const SizedBox(height: 18),
 
-                  const Text(
+                  Text(
                     'bHiVE Wallet',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -83,7 +138,7 @@ class _AboutScreenState extends State<AboutScreen> {
 
                   const SizedBox(height: 7),
 
-                  const Text(
+                  Text(
                     'Offline-first daily spending tracker',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -107,7 +162,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     ),
                     child: Text(
                       _versionText,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -131,41 +186,49 @@ class _AboutScreenState extends State<AboutScreen> {
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(color: AppColors.border, width: 0.7),
               ),
-              child: const Column(
+              child: Column(
                 children: [
-                  _DeveloperHeader(),
+                  const _DeveloperHeader(),
 
-                  SizedBox(height: 18),
+                  const SizedBox(height: 18),
 
-                  _InfoTile(
+                  const _InfoTile(
                     icon: Icons.person_rounded,
                     label: 'Name',
                     value: 'A.T.M. Saidul Karim',
                   ),
 
-                  _InfoTile(
+                  _ActionInfoTile(
                     icon: Icons.call_rounded,
                     label: 'Phone',
-                    value: '+880 131-266-3311',
+                    title: '+880 131-266-3311',
+                    subtitle: 'Tap to call',
+                    onTap: _openPhone,
                   ),
 
-                  _InfoTile(
+                  _ActionInfoTile(
                     icon: Icons.email_rounded,
                     label: 'Email',
-                    value: 'saidul.cse.ju@gmail.com',
+                    title: 'Email',
+                    subtitle: 'Tap to send message',
+                    onTap: _openEmail,
                   ),
 
-                  _InfoTile(
+                  _ActionInfoTile(
                     icon: Icons.public_rounded,
                     label: 'Website',
-                    value: 'https://imrony.saidul-cse-ju.workers.dev/',
+                    title: 'Portfolio Website',
+                    subtitle: 'Tap to open in browser',
+                    onTap: () => _openUrl(_websiteUrl),
                   ),
 
-                  _InfoTile(
-                    icon: Icons.work_rounded,
+                  _ActionInfoTile(
+                    icon: Icons.business_center_rounded,
                     label: 'LinkedIn',
-                    value: 'https://www.linkedin.com/in/atmskrony',
+                    title: 'LinkedIn Profile',
+                    subtitle: 'Tap to open professional profile',
                     showDivider: false,
+                    onTap: () => _openUrl(_linkedInUrl),
                   ),
                 ],
               ),
@@ -180,7 +243,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(color: AppColors.border, width: 0.7),
               ),
-              child: const Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
@@ -225,10 +288,8 @@ class _DeveloperHeader extends StatelessWidget {
           ),
           child: const Icon(Icons.code_rounded, color: Colors.white, size: 30),
         ),
-
         const SizedBox(width: 14),
-
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -266,7 +327,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 20,
         fontWeight: FontWeight.w900,
@@ -294,38 +355,33 @@ class _InfoTile extends StatelessWidget {
     return Column(
       children: [
         if (showDivider)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 4),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Divider(color: AppColors.border, height: 18),
           )
         else
           const SizedBox(height: 8),
-
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, color: AppColors.textMuted, size: 22),
-
             const SizedBox(width: 14),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     label,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-
                   const SizedBox(height: 4),
-
                   SelectableText(
                     value,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 14.5,
                       fontWeight: FontWeight.w700,
@@ -336,6 +392,105 @@ class _InfoTile extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ActionInfoTile extends StatelessWidget {
+  const _ActionInfoTile({
+    required this.icon,
+    required this.label,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final IconData icon;
+  final String label;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (showDivider)
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 4),
+            child: Divider(color: AppColors.border, height: 18),
+          )
+        else
+          const SizedBox(height: 8),
+        Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent.withOpacity(0.16),
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    child: Icon(icon, color: AppColors.accentLight, size: 21),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: TextStyle(
+                            color: AppColors.textMuted,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          title,
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w900,
+                            height: 1.25,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Icon(
+                    Icons.open_in_new_rounded,
+                    color: AppColors.textMuted,
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );

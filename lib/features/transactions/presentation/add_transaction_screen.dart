@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -205,11 +208,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       ),
       body: SafeArea(
         child: _loading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator())
             : Form(
                 key: _formKey,
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 120),
                   children: [
                     Row(
                       children: [
@@ -221,7 +224,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             onTap: () => _changeType(TransactionType.expense),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: _TypeButton(
                             text: 'Income',
@@ -233,19 +236,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 22),
+                    SizedBox(height: 22),
 
                     TextFormField(
                       controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(
+                      keyboardType: TextInputType.numberWithOptions(
                         decimal: true,
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Amount',
                         prefixText: '৳ ',
                       ),
@@ -258,12 +261,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     DropdownButtonFormField<CategoryModel>(
                       value: _selectedCategory,
                       dropdownColor: AppColors.surface,
-                      decoration: const InputDecoration(labelText: 'Category'),
+                      decoration: InputDecoration(labelText: 'Category'),
                       items: _categories.map((category) {
                         return DropdownMenuItem<CategoryModel>(
                           value: category,
@@ -279,12 +282,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     DropdownButtonFormField<AccountModel>(
                       value: _selectedAccount,
                       dropdownColor: AppColors.surface,
-                      decoration: const InputDecoration(labelText: 'Account'),
+                      decoration: InputDecoration(labelText: 'Account'),
                       items: _accounts.map((account) {
                         return DropdownMenuItem<AccountModel>(
                           value: account,
@@ -300,20 +303,20 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     InkWell(
                       onTap: _pickDate,
                       borderRadius: BorderRadius.circular(14),
                       child: InputDecorator(
-                        decoration: const InputDecoration(labelText: 'Date'),
+                        decoration: InputDecoration(labelText: 'Date'),
                         child: Row(
                           children: [
-                            const Icon(Icons.calendar_month_rounded),
-                            const SizedBox(width: 12),
+                            Icon(Icons.calendar_month_rounded),
+                            SizedBox(width: 12),
                             Text(
                               dateText,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.textPrimary,
                                 fontSize: 16,
                               ),
@@ -323,13 +326,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     TextFormField(
                       controller: _noteController,
                       maxLines: 3,
-                      style: const TextStyle(color: AppColors.textPrimary),
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: AppColors.textPrimary),
+                      decoration: InputDecoration(
                         labelText: 'Note',
                         alignLabelWithHint: true,
                       ),
@@ -340,7 +343,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 18),
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 18),
           child: SizedBox(
             height: 54,
             child: ElevatedButton.icon(
@@ -353,7 +356,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               ),
               onPressed: _saving ? null : _save,
               icon: _saving
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 18,
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
@@ -394,14 +397,14 @@ class _TypeButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: 14),
           child: Column(
             children: [
               Icon(icon, color: AppColors.textPrimary),
-              const SizedBox(height: 7),
+              SizedBox(height: 7),
               Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w700,
                 ),

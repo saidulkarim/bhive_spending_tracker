@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -78,7 +81,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   Future<void> _openAdd() async {
     final result = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(builder: (_) => const AddTransactionScreen()),
+      MaterialPageRoute(builder: (_) => AddTransactionScreen()),
     );
 
     if (result == true) {
@@ -108,18 +111,18 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          title: const Text('Delete transaction?'),
-          content: const Text(
+          title: Text('Delete transaction?'),
+          content: Text(
             'This transaction will be removed and account balance will be adjusted.',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('No'),
+              child: Text('No'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Yes, Delete'),
+              child: Text('Yes, Delete'),
             ),
           ],
         );
@@ -136,7 +139,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     widget.onChanged();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text('Transaction deleted.'),
         behavior: SnackBarBehavior.floating,
       ),
@@ -153,7 +156,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Transactions',
           style: TextStyle(
             color: AppColors.textPrimary,
@@ -164,7 +167,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: EdgeInsets.only(right: 12),
             child: _TopAddButton(onPressed: _openAdd),
           ),
         ],
@@ -173,13 +176,13 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         top: false,
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Container(
                 height: 48,
-                padding: const EdgeInsets.all(4),
+                padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: AppColors.card,
                   borderRadius: BorderRadius.circular(16),
@@ -206,17 +209,17 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _load,
                 child: _loading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? Center(child: CircularProgressIndicator())
                     : _items.isEmpty
                     ? ListView(
-                        padding: const EdgeInsets.fromLTRB(20, 80, 20, 110),
-                        children: const [
+                        padding: EdgeInsets.fromLTRB(20, 80, 20, 110),
+                        children: [
                           Icon(
                             Icons.receipt_long_rounded,
                             color: AppColors.textMuted,
@@ -244,9 +247,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                         ],
                       )
                     : ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 110),
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 110),
                         itemCount: _items.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        separatorBuilder: (_, _) => SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final item = _items[index];
                           return _TransactionTile(
@@ -275,8 +278,8 @@ class _TopAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: const Icon(Icons.add_rounded, size: 18),
-      label: const Text(
+      icon: Icon(Icons.add_rounded, size: 18),
+      label: Text(
         'Add',
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
       ),
@@ -284,8 +287,8 @@ class _TopAddButton extends StatelessWidget {
         backgroundColor: AppColors.accent,
         foregroundColor: Colors.white,
         elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
-        minimumSize: const Size(0, 38),
+        padding: EdgeInsets.symmetric(horizontal: 13, vertical: 9),
+        minimumSize: Size(0, 38),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
@@ -349,7 +352,7 @@ class _TransactionTile extends StatelessWidget {
     final amountColor = isIncome ? AppColors.success : AppColors.danger;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 13, 6, 13),
+      padding: EdgeInsets.fromLTRB(14, 13, 6, 13),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(18),
@@ -370,14 +373,14 @@ class _TransactionTile extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           Expanded(
             child: InkWell(
               onTap: onEdit,
               borderRadius: BorderRadius.circular(12),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
+                padding: EdgeInsets.symmetric(vertical: 2),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -385,30 +388,30 @@ class _TransactionTile extends StatelessWidget {
                       item.categoryName ?? 'Category',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       '${item.accountName ?? 'Account'} • $date',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     if ((item.note ?? '').trim().isNotEmpty) ...[
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         item.note!,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMuted,
                           fontSize: 12.5,
                         ),
@@ -420,7 +423,7 @@ class _TransactionTile extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -433,14 +436,14 @@ class _TransactionTile extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: onEdit,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.edit_rounded,
                       color: AppColors.textMuted,
                       size: 20,
@@ -449,7 +452,7 @@ class _TransactionTile extends StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: onDelete,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.delete_outline_rounded,
                       color: AppColors.textMuted,
                       size: 21,

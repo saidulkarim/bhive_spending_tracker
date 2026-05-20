@@ -1,5 +1,5 @@
 class AccountModel {
-  const AccountModel({
+  AccountModel({
     this.id,
     required this.name,
     required this.openingBalance,

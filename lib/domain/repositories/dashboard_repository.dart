@@ -4,7 +4,7 @@ import '../../data/local/app_database.dart';
 import '../models/transaction_model.dart';
 
 class DashboardSummary {
-  const DashboardSummary({
+  DashboardSummary({
     required this.income,
     required this.expense,
     required this.balance,
@@ -20,7 +20,7 @@ class DashboardSummary {
 }
 
 class TopCategoryItem {
-  const TopCategoryItem({
+  TopCategoryItem({
     required this.name,
     required this.total,
     required this.percent,
@@ -32,7 +32,7 @@ class TopCategoryItem {
 }
 
 class DailyTrendItem {
-  const DailyTrendItem({
+  DailyTrendItem({
     required this.day,
     required this.income,
     required this.expense,

@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../data/local/app_database.dart';
 
 class CsvBackupResult {
-  const CsvBackupResult({
+  CsvBackupResult({
     required this.success,
     required this.message,
     this.filePath,
@@ -42,7 +42,7 @@ class CsvBackupService {
         ['transactions', jsonEncode(transactions)],
       ];
 
-      final csvText = const ListToCsvConverter().convert(csvRows);
+      final csvText = ListToCsvConverter().convert(csvRows);
 
       final directory = await getApplicationDocumentsDirectory();
       final backupDir = Directory('${directory.path}/spending_tracker_backups');
@@ -92,7 +92,7 @@ class CsvBackupService {
       );
 
       if (picked == null || picked.files.single.path == null) {
-        return const CsvBackupResult(
+        return CsvBackupResult(
           success: false,
           message: 'No backup file selected.',
         );
@@ -101,12 +101,12 @@ class CsvBackupService {
       final file = File(picked.files.single.path!);
       final csvText = await file.readAsString(encoding: utf8);
 
-      final rows = const CsvToListConverter(
+      final rows = CsvToListConverter(
         shouldParseNumbers: false,
       ).convert(csvText);
 
       if (rows.length < 2) {
-        return const CsvBackupResult(
+        return CsvBackupResult(
           success: false,
           message: 'Invalid backup file.',
         );
@@ -126,7 +126,7 @@ class CsvBackupService {
       final transactionsJson = sections['transactions'];
 
       if (accountsJson == null || categoriesJson == null || transactionsJson == null) {
-        return const CsvBackupResult(
+        return CsvBackupResult(
           success: false,
           message: 'Backup file missing required sections.',
         );

@@ -1,7 +1,7 @@
 import 'transaction_type.dart';
 
 class TransactionModel {
-  const TransactionModel({
+  TransactionModel({
     this.id,
     required this.type,
     required this.amount,

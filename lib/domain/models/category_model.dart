@@ -1,5 +1,5 @@
 class CategoryModel {
-  const CategoryModel({
+  CategoryModel({
     this.id,
     required this.name,
     required this.type,
