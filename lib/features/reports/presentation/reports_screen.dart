@@ -728,7 +728,7 @@ class _SavingRateCard extends StatelessWidget {
           const _CardHeader(
             title: 'Saving Rate',
             subtitle: 'Income, expense and retained amount',
-            icon: Icons.savings_rounded,
+            icon: Icons.account_balance,
           ),
           const SizedBox(height: 16),
           Row(
